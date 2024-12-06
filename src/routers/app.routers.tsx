@@ -62,6 +62,68 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  // {
+  //   path: "/",
+  //   element: <LandingPages />,
+  // },
+  // {
+  //   path: "/unauthorized",
+  //   element: <Forbidden />,
+  // },
+  // {
+  //   path: "*",
+  //   element: <NotFound />,
+  // },
+  // {
+  //   path: "/mahasiswa",
+  //   element: (
+  //       <ProtectedRoute roles={["Mahasiswa"]}>
+  //         <DashboardLayout role="mahasiswa" />
+  //       </ProtectedRoute>
+  //   ),
+  //   children: [
+  //     { path: "/mahasiswa", element: <DashboardMahasiswa/> },
+  //     { path: "/mahasiswa/pengajuan", element: <Pengajuan/> },
+  //     { path: "/mahasiswa/status", element: <Status/> },
+  //   ],
+  // },
+  // {
+  //   path: "/pembimbing-instansi",
+  //   element: (
+  //       <ProtectedRoute roles={["Pembimbing Instansi"]}>
+  //         <DashboardInstansi />
+  //       </ProtectedRoute>
+  //   ),
+  // },
+  // {
+  //   path: "/dosen",
+  //   element: (
+  //       <ProtectedRoute roles={["Dosen"]}>
+  //         <DashboardLayout role="dosen" />
+  //       </ProtectedRoute>
+  //   ),
+  //   children: [
+  //     { path: "/dosen", element: <DashboardDosen/> },
+  //     { path: "/dosen/mahasiswa-bimbingan", element: <MahasiswaBimbingan/> },
+  //     { path: "/dosen/mahasiswa-seminar", element: <MahasiswaSeminar/> },
+  //     { path: "/dosen/riwayat", element: <RiwayatDosen/> },
+  //   ],
+  // },
+  // {
+  //   path: "/koordinator",
+  //   element: (
+  //       <ProtectedRoute roles={["Koordinator"]}>
+  //         <DashboardLayout role="koordinator" />
+  //       </ProtectedRoute>
+  //   ),
+  //   children: [
+  //     { path: "/koordinator", element: <DashboardKoordinator/> },
+  //     { path: "/koordinator/manage-account", element: <ManageAccounts/> },
+  //     { path: "/koordinator/validasi", element: <Validasi/> },
+  //     { path: "/koordinator/jadwal-nilai", element: <JadwalNilai/> },
+  //     { path: "/koordinator/notifikasi", element: <Notifikasi/> },
+  //   ],
+  // },
 ]);
 
 export default router;

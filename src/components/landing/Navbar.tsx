@@ -1,140 +1,79 @@
-import { NavbarProps } from "../../interfaces/common.interfaces";
-import { Link } from "react-router-dom";
-import ThemeSwitcher from "../ThemeSwitcher";
 import { useState } from "react";
+import { Button, Modal, Navbar } from "flowbite-react";
+import { HeaderProps } from "../../interfaces/common.interfaces.ts";
+import logo from "../../assets/logoimage.png";
 
-const Navbar = ({
-  setTheme,
-  currentTheme,
-  isLogin,
-  onLoginClick,
-  onGoToDashboardClick,
-}: NavbarProps) => {
-  const [showModal, setShowModal] = useState(false);
-  const [isLogout, setIsLogout] = useState(false);
+const Header = ({
+                    setTheme,
+                    currentTheme,
+                    isLogin,
+                    onLoginClick,
+                    onGoToDashboardClick
+                }: HeaderProps) => {
+    const [showModal, setShowModal] = useState(false);
+    const [isLogout, setIsLogout] = useState(false);
 
-  return (
-    <div className="fixed z-10 flex justify-between shadow-sm bg-base-100/95 navbar">
-      <div>
-        <Link to="/" className="btn btn-ghost">
-          <img src="/uin-suska.svg" alt="UIN Suska Riau" className="h-8" />
-          <span>iMemoraise - UIN Suska Riau</span>
-        </Link>
-      </div>
-      <div className="flex gap-2 pr-1">
-        <ThemeSwitcher setTheme={setTheme} currentTheme={currentTheme} />
-        {isLogin && (
-          <button
-            className="hidden btn btn-outline sm:flex"
-            onClick={onGoToDashboardClick}
-          >
-            <span>Pergi ke Dashboard</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 transform -rotate-45"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          </button>
-        )}
-        <button
-          className={`btn ${isLogin ? "btn-error" : "btn-primary"}`}
-          onClick={
-            isLogin
-              ? () => {
-                  setShowModal(true);
-                }
-              : onLoginClick
-          }
-        >
-          <span className="hidden sm:inline">
-            {isLogin ? "Sign Out" : "Sign In"}
-          </span>
-          {isLogin ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 transform -rotate-45"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M14 5l7 7m0 0l-7 7m7-7H3"
-              />
-            </svg>
-          )}
-        </button>
-      </div>
+    return (
+        <>
+            <Navbar fluid rounded className="fixed w-full z-50 bg-white shadow-md">
+                <Navbar.Brand href="#home">
+                    <img src={logo} alt="Logo" className="h-10 w-10 mr-3"/>
+                    <span className="text-xl font-bold text-primary-dark">SITRACK</span>
+                </Navbar.Brand>
 
-      {showModal && (
-        <div className="fixed top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50">
-          <div className="modal-box lg:-ml-8">
-            <h2 className="mb-6 text-xl font-bold">Logout Confirmation ⚠🥵</h2>
+                <div className="flex md:order-2">
+                    {isLogin ? (
+                        <Button
+                            outline
+                            onClick={onGoToDashboardClick}
+                            className="mr-2 hidden sm:block"
+                        >
+                            Pergi ke Dashboard
+                        </Button>
+                    ) : null}
 
-            <p className="text-xl">
-              Apakah kamu yakin mau logout dari aplikasi iMemoraise inih?
-            </p>
+                    <Button
+                        onClick={isLogin ? () => setShowModal(true) : onLoginClick}
+                        color={isLogin ? "failure" : "blue"}
+                    >
+                        {isLogin ? "Sign Out" : "Sign In"}
+                    </Button>
 
-            {isLogout && (
-              <div className="flex items-center justify-center w-full py-2">
-                <span className="loading loading-bars loading-lg"></span>
-              </div>
-            )}
+                    <Navbar.Toggle className="ml-4"/>
+                </div>
 
-            <div className="modal-action">
-              <button
-                className="w-1/2 text-lg btn btn-rounded-sm btn-outline btn-error"
-                onClick={() => {
-                  setIsLogout(true);
-                  onLoginClick();
-                }}
-              >
-                {isLogout ? (
-                  <span>Sedang Logout...</span>
-                ) : (
-                  <span>Iyah, saya yakin</span>
-                )}
-              </button>
-              <button
-                className="w-1/2 text-lg btn btn-rounded-sm btn-warning"
-                onClick={() => {
-                  setShowModal(false);
-                }}
-              >
-                Gak jadi deh
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+                <Navbar.Collapse>
+                    <Navbar.Link href="#home">Home</Navbar.Link>
+                    <Navbar.Link href="#features">Features</Navbar.Link>
+                    <Navbar.Link href="#flow">Flows</Navbar.Link>
+                    <Navbar.Link href="#faq">FAQs</Navbar.Link>
+                </Navbar.Collapse>
+            </Navbar>
+
+            {/* Logout Confirmation Modal */}
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+                <Modal.Header>Logout Confirmation</Modal.Header>
+                <Modal.Body>
+                    <p className="text-xl">Apakah kamu yakin mau logout dari aplikasi?</p>
+                    {isLogout && <div className="text-center">Loading...</div>}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        color="failure"
+                        onClick={() => {
+                            setIsLogout(true);
+                            onLoginClick();
+                        }}
+                    >
+                        {isLogout ? "Sedang Logout..." : "Iyah, saya yakin"}
+                    </Button>
+                    <Button color="gray" onClick={() => setShowModal(false)}>
+                        Gak jadi deh
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
 };
 
-export default Navbar;
+export default Header;

@@ -18,13 +18,31 @@ const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
   }
 
   // Periksa apakah pengguna memiliki salah satu dari peran yang diizinkan
-  const hasRole = roles.some((role) => keycloak.hasResourceRole(role));
+  // const hasRole = roles.some((role) => keycloak.hasResourceRole(role));
 
-  if (!hasRole) {
-    return <Navigate to="/unauthorized" />;
+  const mockRoleAccess = {
+    "mahasiswa": ["mahasiswa"],
+    "dosen": ["dosen"],
+    "admin": ["admin"],
+    "pembimbing-instansi": ["pembimbing instansi"],
+    "kaprodi": ["kaprodi"]
   }
 
-  return children;
+  const hasRole = roles.some(role =>
+      keycloak.hasResourceRole(role) ||
+      mockRoleAccess[role]?.some(mockRole =>
+          keycloak.hasResourceRole(mockRole)
+      )
+  );
+
+  const isDevelopment = import.meta.env.MODE === 'development';
+  const isMahasiswaRoute = roles.includes('mahasiswa');
+
+  if (hasRole || (isDevelopment && isMahasiswaRoute)) {
+    return children;
+  }
+
+  return <Navigate to="/unauthorized" />;
 };
 
 export default ProtectedRoute;

@@ -11,7 +11,13 @@ const keycloak = new Keycloak({
 
 const App = () => {
   return (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider
+        authClient={keycloak}
+        // initOptions={{
+        //   onLoad: "login-required",
+        //   checkLoginIframe: false,
+        // }}
+    >
       <RouterProvider router={router} />
     </ReactKeycloakProvider>
   );

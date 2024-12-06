@@ -1,42 +1,66 @@
-const Features = () => {
-  const features = [
+import React from "react";
+import { Card } from "flowbite-react";
+
+interface Feature {
+  title: string;
+  description: string;
+  icon: string;
+}
+
+const Features: React.FC = () => {
+  const features: Feature[] = [
     {
-      title: "Laporan Digital yang Praktis",
+      title: "Pendaftaran Online",
       description:
-        "iMemoraise memberikan laporan digital. Jadi, kamu nggak perlu khawatir lagi kalau kertas form hafalanmu hilang.",
+          "Daftar seminar kerja praktik secara online tanpa perlu antri",
+      icon: "📝",
+    },
+    {
+      title: "Track Progress",
+      description:
+          "Pantau status pendaftaran dan jadwal seminar secara real-time",
       icon: "📊",
     },
     {
-      title: "Fleksibel dan Mudah Digunakan",
+      title: "Notifikasi",
       description:
-        "Fleksibel digunakan di mana pun dan kapan pun buat lihat progres hafalanmu.",
-      icon: "🌐",
+          "Dapatkan pemberitahuan untuk setiap update status pendaftaran",
+      icon: "🔔",
     },
     {
-      title: "Akses Cepat dan Terhubung Selalu",
-      description:
-        "Akses cepat lewat web dan aplikasi, membuatmu selalu terhubung dengan kami.",
-      icon: "🔗",
+      title: "Digital Documents",
+      description: "Upload dan kelola dokumen secara digital dengan aman",
+      icon: "📄",
     },
   ];
 
   return (
-    <section className="px-16 py-24 bg-base-200/50">
-      <p className="mb-8 text-3xl text-center">
-        <b>Mengapa Harus iMemoraise?</b>
-      </p>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-        {features.map((feature, index) => (
-          <div key={index} className="p-4 shadow-xl card bg-base-100">
-            <div className="items-center text-center card-body">
-              <div className="mb-4 text-6xl">{feature.icon}</div>
-              <h3 className="my-4 card-title">{feature.title}</h3>
-              <p>{feature.description}</p>
-            </div>
+      <div id="features" className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Fitur Unggulan
+            </h2>
+            <p className="text-gray-600">
+              Nikmati kemudahan dalam proses pendaftaran seminar kerja praktik
+            </p>
           </div>
-        ))}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((feature, index) => (
+                <Card key={index} className="max-w-sm">
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+                    {feature.title}
+                  </h5>
+                  <p className="font-normal text-gray-700 dark:text-gray-400">
+                    {feature.description}
+                  </p>
+                </Card>
+            ))}
+          </div>
+        </div>
       </div>
-    </section>
   );
 };
 
