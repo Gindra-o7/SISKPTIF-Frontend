@@ -22,8 +22,9 @@ const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
 
   const mockRoleAccess = {
     "mahasiswa": ["mahasiswa"],
-    "dosen": ["dosen"],
-    "admin": ["admin"],
+    "dosen-pembimbing": ["dosen pembimbing"],
+    "dosen-penguji": ["dosen penguji"],
+    "koordinator": ["koordinator"],
     "pembimbing-instansi": ["pembimbing instansi"],
     "kaprodi": ["kaprodi"]
   }

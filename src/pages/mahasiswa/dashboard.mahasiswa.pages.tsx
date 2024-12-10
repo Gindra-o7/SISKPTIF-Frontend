@@ -1,7 +1,7 @@
 import { useTheme } from "../../hooks/useTheme.hooks";
 import Layout from "../../components/dashboard/Layout";
 import { sidebarMahasiswaItems } from "../../components/dashboard/SidebarItems";
-import DashboardMahasiswa from "../../components/dashboard/mahasiswa/DashboardMahasiswa";
+import DashboardMahasiswa from "../../components/dashboard/mahasiswa/DashboardMahasiswa.tsx"
 
 const DashboardMahasiswaPages = () => {
   const { theme, setTheme } = useTheme();
@@ -12,7 +12,7 @@ const DashboardMahasiswaPages = () => {
         setTheme={setTheme}
         currentTheme={theme}
         sidebarItems={sidebarMahasiswaItems}
-        subpageTitle="Dashboard Mahasiswa"
+        subpageTitle="Dashboard"
       >
         <DashboardMahasiswa />
       </Layout>

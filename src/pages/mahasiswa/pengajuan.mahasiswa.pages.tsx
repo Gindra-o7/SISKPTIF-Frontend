@@ -1,9 +1,9 @@
 import { useTheme } from "../../hooks/useTheme.hooks";
 import Layout from "../../components/dashboard/Layout";
 import { sidebarMahasiswaItems } from "../../components/dashboard/SidebarItems";
-import SetoranMahasiswa from "../../components/dashboard/mahasiswa/SetoranMahasiswa";
+import PengajuanMahasiswa from "../../components/dashboard/mahasiswa/PengajuanMahasiswa.tsx"
 
-const SetoranMahasiswaPages = () => {
+const PengajuanMahasiswaPages = () => {
   const { theme, setTheme } = useTheme();
 
   return (
@@ -12,12 +12,12 @@ const SetoranMahasiswaPages = () => {
         setTheme={setTheme}
         currentTheme={theme}
         sidebarItems={sidebarMahasiswaItems}
-        subpageTitle="Setoran Mahasiswa"
+        subpageTitle="Pengajuan"
       >
-        <SetoranMahasiswa />
+        <PengajuanMahasiswa />
       </Layout>
     </div>
   );
-};
+}
 
-export default SetoranMahasiswaPages;
+export default PengajuanMahasiswaPages;

@@ -10,16 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.1.6",
     "@react-keycloak/web": "^3.4.0",
+    "apexcharts": "^4.1.0",
     "axios": "^1.7.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "dompurify": "^3.1.6",
     "flowbite-react": "^0.10.2",
+    "font-awesome": "^4.7.0",
+    "framer-motion": "^11.13.3",
     "keycloak-js": "^25.0.2",
     "lucide-react": "^0.464.0",
     "react": "^18.3.1",
+    "react-apexcharts": "^1.7.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
-    "react-to-print": "^2.15.1"
+    "react-to-print": "^2.15.1",
+    "simple-datatables": "^9.2.1",
+    "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",

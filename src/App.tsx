@@ -13,10 +13,6 @@ const App = () => {
   return (
     <ReactKeycloakProvider
         authClient={keycloak}
-        // initOptions={{
-        //   onLoad: "login-required",
-        //   checkLoginIframe: false,
-        // }}
     >
       <RouterProvider router={router} />
     </ReactKeycloakProvider>

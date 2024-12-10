@@ -1,156 +1,243 @@
-import { LayoutProps } from "../../interfaces/common.interfaces";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useKeycloak } from "@react-keycloak/web";
-import ThemeSwitcher from "../ThemeSwitcher";
-import { useState } from "react";
+import { LogOut, Menu, X, User } from "lucide-react";
+import Logout from "../modal/Logout.tsx";
+import Profile from "../modal/Profile.tsx";
+import { LayoutProps } from "../../interfaces/common.interfaces";
 
-const Layout = ({
-  setTheme,
-  currentTheme,
-  children,
-  sidebarItems,
-  subpageTitle,
-}: LayoutProps) => {
+const Layout = ({ children, sidebarItems, subpageTitle }: LayoutProps) => {
   const location = useLocation();
-  const { keycloak } = useKeycloak();
   const [showModal, setShowModal] = useState(false);
-  const [isLogout, setIsLogout] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  // Modify state initialization to check screen size
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    // On desktop, keep sidebar open by default
+    return window.innerWidth >= 1024; // lg breakpoint in Tailwind
+  });
+
+  // Add effect to handle responsive sidebar behavior
+  useEffect(() => {
+    const handleResize = () => {
+      // On desktop (lg and above), keep sidebar open
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(true);
+      } else {
+        // On mobile, reset to closed state
+        setIsSidebarOpen(false);
+      }
+    };
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    // Only allow manual toggle on mobile
+    if (window.innerWidth < 1024) {
+      setIsSidebarOpen(!isSidebarOpen);
+    }
+  };
+
+  // Handler for saving profile data
+  const handleProfileSave = (data: {
+    name: string;
+    email: string;
+    phone: string;
+  }) => {
+    // TODO: Implement actual save logic (e.g., API call)
+    console.log("Saving profile data:", data);
+    setShowProfileModal(false);
+  };
 
   return (
-    <div className="h-full drawer lg:drawer-open">
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="h-full drawer-content">
-        <div className="sticky top-0 z-10 flex justify-between h-16 pl-4 border-b shadow-md navbar bg-base-100 border-neutral-content">
-          <div className="flex gap-1">
-            <label
-              htmlFor="my-drawer"
-              className="btn btn-ghost drawer-button lg:hidden"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-5 stroke-current"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h7"
-                ></path>
-              </svg>
-            </label>
-            <span className="text-lg font-semibold">
-              <button
-                className="hidden lg:inline btn btn-rounded-sm btn-ghost text-error px-2 p-0 mr-1"
-                onClick={() => window.history.back()}
-              >
-                <span className="underline">{"< Kembali"}</span>
-              </button>
-              <span className="text-sm lg:text-lg">{subpageTitle}</span>
-            </span>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-800 relative">
+      {/* Header */}
+      <header
+        className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between h-16 px-4
+        bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm"
+      >
+        <div className="flex items-center gap-2">
+          {/* Mobile Sidebar Toggle */}
+          <button
+            onClick={toggleSidebar}
+            className="mr-2 lg:hidden"
+            aria-label="Toggle Sidebar"
+          >
+            {isSidebarOpen ? (
+              <X className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            ) : (
+              <Menu className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            )}
+          </button>
+          <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+            {subpageTitle}
+          </h1>
+        </div>
+      </header>
+
+      {/* Sidebar */}
+      <div
+        className={`
+      fixed top-16 bottom-0 left-0 z-20 
+      bg-white dark:bg-gray-800 
+      border-r border-gray-200 dark:border-gray-700
+      overflow-hidden
+      transition-all duration-500 ease-in-out
+      ${isSidebarOpen ? "w-64" : "lg:w-16 w-0"}
+      ${isSidebarOpen ? "translate-x-0" : "lg:translate-x-0 -translate-x-full"}
+    `}
+      >
+        <div className="flex flex-col h-full">
+          {/* Sidebar Content */}
+          <div className="flex-grow overflow-y-auto px-3 py-4">
+            <ul className="space-y-2 font-medium">
+              {sidebarItems.map((item, index) => {
+                const isActive =
+                  location.pathname === item.link ||
+                  (location.pathname ===
+                    "/dosen-dosen-penguji/mahasiswa/setoran" &&
+                    item.label === "Mahasiswa");
+
+                return (
+                  <li key={index}>
+                    <Link
+                      to={item.link}
+                      className={`flex items-center p-2 rounded-lg group relative
+                        ${
+                          isActive
+                            ? "text-gray-900 bg-gray-100 dark:text-white dark:bg-gray-700"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        }
+                        ${!isSidebarOpen ? "lg:justify-center" : ""}`}
+                    >
+                      {/* Penanda Aktif */}
+                      {isActive && (
+                        <div className="absolute left-0 top-0 h-full w-0.5 bg-gray-900 dark:bg-gray-300 rounded-r" />
+                      )}
+
+                      {/* Sidebar Icon */}
+                      <div className="w-6 h-6 flex items-center justify-center">
+                        {item.icon}
+                      </div>
+
+                      {/* Sidebar Label */}
+                      <span
+                        className={`flex-1 ms-3 whitespace-nowrap transition-all duration-300
+                    ${
+                      !isSidebarOpen
+                        ? "lg:w-0 lg:overflow-hidden lg:opacity-0"
+                        : "w-auto opacity-100"
+                    }`}
+                      >
+                        {item.label}
+                      </span>
+
+                      {/* Tooltip for Collapsed Sidebar */}
+                      {!isSidebarOpen && (
+                        <div className="absolute left-full ml-6 py-1 px-2 bg-gray-900 text-white text-sm rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                          {item.label}
+                        </div>
+                      )}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
-          <div>
-            <ThemeSwitcher setTheme={setTheme} currentTheme={currentTheme} />
+
+          {/* Logout Button */}
+          <div className="border-t border-gray-200 dark:border-gray-700 p-3 space-y-2">
             <button
-              className="btn btn-ghost text-primary"
               onClick={() => setShowModal(true)}
+              className={`flex items-center p-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 w-full ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+              aria-label="Logout"
             >
-              <span className="hidden sm:inline">Sign Out</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+              {/* Icon Logout */}
+              <LogOut
+                className={`h-5 w-5 transition-transform duration-500 ease-in-out ${
+                  isSidebarOpen ? "translate-x-0" : "translate-x-0"
+                }`}
+              />
+              {/* Label Logout */}
+              <span
+                className={`font-medium ms-3 whitespace-nowrap transition-all duration-500 ease-in-out ${
+                  isSidebarOpen
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-[-20px]"
+                }`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
+                Logout
+              </span>
+            </button>
+            <button
+              onClick={() => setShowProfileModal(true)}
+              className={`flex items-center p-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 w-full ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+              aria-label="Profile"
+            >
+              <User
+                className={`h-5 w-5 transition-transform duration-500 ease-in-out ${
+                  isSidebarOpen ? "translate-x-0" : "translate-x-0"
+                }`}
+              />
+              <span
+                className={`font-medium ms-3 whitespace-nowrap transition-all duration-500 ease-in-out ${
+                  isSidebarOpen
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 translate-x-[-20px]"
+                }`}
+              >
+                Profile
+              </span>
             </button>
           </div>
         </div>
-        <div className="p-4 bg-base-200/20">{children}</div>
-      </div>
-      <div className="z-20 drawer-side">
-        <label htmlFor="my-drawer" className="drawer-overlay"></label>
-        <ul className="h-full p-4 border-r border-black w-80 menu bg-base-100">
-          <div className="flex items-center justify-center h-24 mb-3 text-base-100/95">
-            <img
-              src="/uin-suska.svg"
-              alt="UIN Suska Riau"
-              className="h-16 mr-2"
-            />
-            <span className="text-2xl font-bold text-base-content">
-              <span className="italic underline">iMemoraise</span> <br /> UIN
-              Suska Riau
-            </span>
-          </div>
-          <div className="mx-auto h-[1px] w-48 mb-5 bg-base-content" />
-          {sidebarItems.map((item, index) => (
-            <li key={index}>
-              <Link
-                to={item.link}
-                className={`m-2 text-base hover:bg-primary/10 ${
-                  location.pathname === item.link ||
-                  (location.pathname === "/dosen-pa/mahasiswa/setoran" &&
-                    item.label === "Mahasiswa")
-                    ? "bg-primary/40"
-                    : "bg-base-200"
-                }`}
-              >
-                {item.icon}
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
       </div>
 
+      {/* Main Content Area */}
+      <div
+        className={`transition-all duration-300 flex-1 ${
+          isSidebarOpen ? "lg:ml-64" : "ml-0 lg:ml-20"
+        }`}
+      >
+        <main className="p-8 mt-16">{children}</main>
+      </div>
+
+      {/* Logout Modal */}
       {showModal && (
-        <div className="flex justify-center items-center bg-black bg-opacity-50 w-screen h-screen fixed top-0 left-0 z-50">
-          <div className="modal-box lg:ml-10">
-            <h2 className="mb-6 text-xl font-bold">Logout Confirmation ⚠🥵</h2>
+        <Logout isOpen={showModal} onClose={() => setShowModal(false)} />
+      )}
 
-            <p className="text-xl">
-              Apakah kamu yakin mau logout dari aplikasi iMemoraise inih?
-            </p>
+      {/* Profile Modal */}
+      {showProfileModal && (
+        <Profile 
+          isOpen={showProfileModal} 
+          onClose={() => setShowProfileModal(false)}
+          onSave={handleProfileSave}
+          userData={{
+            // Placeholder data - replace with actual user data from context/state
+            name: "John Doe",
+            email: "john.doe@example.com",
+            phone: "+62 812 3456 7890"
+          }}
+        />
+      )}
 
-            {isLogout && (
-              <div className="w-full flex justify-center items-center py-2">
-                <span className="loading loading-bars loading-lg"></span>
-              </div>
-            )}
-
-            <div className="modal-action">
-              <button
-                className="w-1/2 btn btn-rounded-sm btn-outline btn-error text-lg"
-                onClick={() => {
-                  setIsLogout(true);
-                  keycloak.logout();
-                }}
-              >
-                {isLogout ? (
-                  <span>Sedang Logout...</span>
-                ) : (
-                  <span>Iyah, saya yakin</span>
-                )}
-              </button>
-              <button
-                className="w-1/2 btn btn-rounded-sm btn-warning text-lg"
-                onClick={() => {
-                  setShowModal(false);
-                }}
-              >
-                Gak jadi deh
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Overlay for Mobile */}
+      {isSidebarOpen && (
+        <div
+          onClick={toggleSidebar}
+          className="fixed inset-0 z-10 bg-black/50 lg:hidden"
+        />
       )}
     </div>
   );

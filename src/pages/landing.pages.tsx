@@ -53,15 +53,17 @@ const LandingPages = () => {
             return;
         }
 
-        if (keycloak.hasResourceRole("Mahasiswa")) {
+        if (keycloak.hasResourceRole("mahasiswa")) {
             navigate("/mahasiswa");
-        } else if (keycloak.hasResourceRole("Dosen")) {
-            navigate("/dosen");
-        } else if (keycloak.hasResourceRole("Koordinator")) {
+        } else if (keycloak.hasResourceRole("dosen penguji")) {
+            navigate("/dosen-penguji");
+        } else if (keycloak.hasResourceRole("dosen pembimbing")) {
+            navigate("/dosen-pembimbing");
+        } else if (keycloak.hasResourceRole("koordinator")) {
             navigate("/koordinator");
-        } else if (keycloak.hasResourceRole("Pembimbing Instansi")) {
+        } else if (keycloak.hasResourceRole("pembimbing instansi")) {
             navigate("/pembimbing-instansi");
-        } else if (keycloak.hasResourceRole("Kaprodi")) {
+        } else if (keycloak.hasResourceRole("kaprodi")) {
             navigate("/kaprodi");
         } else {
             console.error("User tidak memiliki peran yang diberikan");

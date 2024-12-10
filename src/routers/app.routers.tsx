@@ -4,10 +4,18 @@ import Forbidden from "../components/Forbidden.tsx";
 import NotFound from "../components/NotFound.tsx";
 import ProtectedRoute from "./protected.routers.tsx";
 import DashboardMahasiswaPages from "../pages/mahasiswa/dashboard.mahasiswa.pages.tsx";
-import SetoranMahasiswaPages from "../pages/mahasiswa/setoran.mahasiswa.pages.tsx";
-import DashboardPAPages from "../pages/pa/dashboard.pa.pages.tsx";
-import MahasiswaPAPages from "../pages/pa/mahasiswa.pa.pages.tsx";
-import MahasiswaPASetoranPages from "../pages/pa/mahasiswa.pa.setoran.pages.tsx";
+import PengajuanMahasiswaPages from "../pages/mahasiswa/pengajuan.mahasiswa.pages.tsx";
+import StatusMahasiswaPages from "../pages/mahasiswa/status.mahasiswa.pages.tsx";
+import DashboardDosenPengujiPages from "../pages/dosen-penguji/dashboard.dosen.penguji.pages.tsx";
+import MahasiswaDosenPengujiPages from "../pages/dosen-penguji/mahasiswa.dosen.penguji.pages.tsx";
+import DashboardDosenPembimbingPages from "../pages/dosen-pembimbing/dashboard.dosen.pembimbing.pages.tsx";
+import RiwayatDosenPembimbingPages from "../pages/dosen-pembimbing/riwayat.dosen.pembimbing.pages.tsx";
+import DashboardKoordinatorPages from "../pages/koordinator/dashboard.koordinator.pages.tsx";
+import ValidasiKoordinatorPages from "../pages/koordinator/validasi.koordinator.pages.tsx";
+import ManageAkunKoordinatorPages from "../pages/koordinator/akun.koordinator.pages.tsx";
+import PenjadwalanKoordinatorPages from "../pages/koordinator/penjadwalan.koordinator.pages.tsx";
+import VisualDataKaprodiPages from "../pages/kaprodi/visualdata.kaprodi.pages.tsx"
+import DashboardPembimbingInstansiPages from "../pages/pembimbing-instansi/dashboard.pembimbinginstansi.pages.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,44 +32,65 @@ const router = createBrowserRouter([
   },
   {
     path: "/mahasiswa",
-    element: (
-      <ProtectedRoute roles={["mahasiswa"]}>
-        <DashboardMahasiswaPages />
-      </ProtectedRoute>
-    ),
+    element: <DashboardMahasiswaPages />,
   },
   {
-    path: "/mahasiswa/setoran",
-    element: (
-      <ProtectedRoute roles={["mahasiswa"]}>
-        <SetoranMahasiswaPages />
-      </ProtectedRoute>
-    ),
+    path: "/mahasiswa/pengajuan",
+    element: <PengajuanMahasiswaPages />,
   },
   {
-    path: "/dosen-pa",
-    element: (
-      <ProtectedRoute roles={["dosen-pa"]}>
-        <DashboardPAPages />
-      </ProtectedRoute>
-    ),
+    path: "/mahasiswa/status",
+    element: <StatusMahasiswaPages />,
   },
   {
-    path: "/dosen-pa/mahasiswa",
-    element: (
-      <ProtectedRoute roles={["dosen-pa"]}>
-        <MahasiswaPAPages />
-      </ProtectedRoute>
-    ),
+    path: "/dosen-penguji",
+    element: <DashboardDosenPengujiPages />,
   },
   {
-    path: "/dosen-pa/mahasiswa/setoran",
+    path: "/dosen-penguji/mahasiswa-seminar",
+    element: <MahasiswaDosenPengujiPages />,
+  },
+  {
+    path: "/dosen-pembimbing",
+    element: <DashboardDosenPembimbingPages />,
+  },
+  {
+    path: "/dosen-pembimbing/riwayat",
+    element: <RiwayatDosenPembimbingPages />,
+  },
+  {
+    path: "/koordinator",
+    element: <DashboardKoordinatorPages />,
+  },
+  {
+    path: "/koordinator/validasi",
+    element: <ValidasiKoordinatorPages />,
+  },
+  {
+    path: "/koordinator/penjadwalan",
+    element: <PenjadwalanKoordinatorPages />,
+  },
+  {
+    path: "/koordinator/manage-account",
+    element: <ManageAkunKoordinatorPages />,
+  },
+  {
+    path: "/kaprodi",
+    element: <VisualDataKaprodiPages />,
+  },
+  {
+    path: "/pembimbing-instansi",
+    element: <DashboardPembimbingInstansiPages />,
+  },
+  {
+    path: "/mahasiswa",
     element: (
-      <ProtectedRoute roles={["dosen-pa"]}>
-        <MahasiswaPASetoranPages />
-      </ProtectedRoute>
+        <ProtectedRoute roles={["mahasiswa"]}>
+          <DashboardMahasiswaPages />
+        </ProtectedRoute>
     ),
   },
+
   // {
   //   path: "/",
   //   element: <LandingPages />,
@@ -78,12 +107,12 @@ const router = createBrowserRouter([
   //   path: "/mahasiswa",
   //   element: (
   //       <ProtectedRoute roles={["Mahasiswa"]}>
-  //         <DashboardLayout role="mahasiswa" />
+  //         <Layout role="mahasiswa" userData={undefined} />
   //       </ProtectedRoute>
   //   ),
   //   children: [
-  //     { path: "/mahasiswa", element: <DashboardMahasiswa/> },
-  //     { path: "/mahasiswa/pengajuan", element: <Pengajuan/> },
+  //     { path: "/mahasiswa", element: <DashboardMahasiswaPages/> },
+  //     { path: "/mahasiswa/pengajuan", element: <SetoranMahasiswaPages/> },
   //     { path: "/mahasiswa/status", element: <Status/> },
   //   ],
   // },
